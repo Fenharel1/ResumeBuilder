@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* font family */
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+  font-weight: 500;
+}
+
+@layer components {
+  .btn-primary {
+    @apply hover:bg-opacity-80
+      bg-[#8910f1] text-white font-bold rounded-[10px];
+  }
+}
