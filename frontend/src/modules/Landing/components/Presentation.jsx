@@ -1,6 +1,6 @@
 export const Presentation = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between">
+    <div className="h-[min(1150px,100vh)] flex flex-col lg:flex-row items-center justify-between">
       <div className="w-1/2 space-y-6">
         <p className="font-bold text-2xl">BOOST YOUR CAREER CASHING</p>
         <p className="font-extrabold text-5xl">
@@ -8,7 +8,7 @@ export const Presentation = () => {
           <br />
           with already made
           <br />
-          <span className="text-[#8910F1] font-extrabold">
+          <span className="text-primary font-extrabold">
             Eye catchy Resumes.
           </span>
         </p>

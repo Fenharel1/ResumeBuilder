@@ -1,10 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./App.css";
-import { LandingPage } from "./modules/Landing/LandingPage";
+import { BrowserRouter } from "react-router-dom";
+import { AppRoutes } from "./routes/AppRoutes";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <LandingPage></LandingPage>
+    <BrowserRouter>
+      <AppRoutes></AppRoutes>
+    </BrowserRouter>
   </React.StrictMode>,
 );
