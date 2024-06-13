@@ -8,8 +8,6 @@ const errorHandler = require('./middleware/errorHandler');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
 
 dotenv.config();
 
@@ -36,8 +34,6 @@ app.use(cors());
 // Use error handler
 app.use(errorHandler);
 
-//Using SwagerDocument
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
