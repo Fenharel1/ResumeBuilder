@@ -8,6 +8,7 @@ const errorHandler = require('./middleware/errorHandler');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const authRoutes = require('./routes/authRoutes');
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // Use routes
 app.use('/api', userRoutes);
+app.use('/api/auth', authRoutes);
 
 // Use morgan
 
