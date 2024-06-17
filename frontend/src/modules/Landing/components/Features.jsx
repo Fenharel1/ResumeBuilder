@@ -1,8 +1,12 @@
+import { NavLink } from "react-router-dom";
+
 export const Features = () => {
   return (
     <>
       <div className="py-16">
-        <h2 className="text-5xl font-bold text-center text-primary">Features</h2>
+        <h2 className="text-5xl font-bold text-center text-primary">
+          Features
+        </h2>
         <div className="mt-8 space-y-16">
           <div className="w-1/2">
             <p className="font-bold text-2xl mb-5">30+ templates</p>
@@ -50,9 +54,9 @@ export const Features = () => {
             One of the most used websites for create resumes, easy and fast!
             with professional templates!
           </p>
-          <button className="btn-primary py-3 px-5 text-lg">
+          <NavLink to="/build" className="btn-primary py-3 px-5 text-lg">
             Create Resume for free
-          </button>
+          </NavLink>
         </div>
         <div className="w-1/2 z-20">
           <div

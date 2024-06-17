@@ -1,20 +1,22 @@
+import { NavLink } from "react-router-dom";
+
 export const Navbar = () => {
   const options = [
     {
       name: "Home",
-      link: "",
+      link: "/home",
     },
     {
       name: "Template",
-      link: "",
+      link: "/templates",
     },
     {
       name: "Join us",
-      link: "",
+      link: "/register",
     },
     {
       name: "About",
-      link: "",
+      link: "/about",
     },
   ];
 
@@ -27,15 +29,17 @@ export const Navbar = () => {
       <ul className="text-xl flex gap-x-12">
         {options.map((option, idx) => (
           <li key={idx}>
-            <a href={option.link}>{option.name}</a>
+            <a className="hover:text-primary hover:scale-125" href={option.link}>
+              {option.name}
+            </a>
           </li>
         ))}
       </ul>
       <div className=" text-xl flex flex-nowrap gap-x-7">
         <button>English</button>
-        <button className="btn-primary py-3 px-10">
+        <NavLink className="btn-primary py-3 px-10" to="/build">
           Start
-        </button>
+        </NavLink>
       </div>
     </nav>
   );
