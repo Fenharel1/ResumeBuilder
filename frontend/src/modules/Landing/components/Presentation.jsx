@@ -1,3 +1,7 @@
+// src/components/Presentation.js
+
+import { Link } from 'react-router-dom';
+
 export const Presentation = () => {
   return (
     <div className="h-[min(1150px,100vh)] flex flex-col lg:flex-row items-center justify-between">
@@ -16,9 +20,11 @@ export const Presentation = () => {
           Create awesome resumes with one of our templates in just few seconds
         </p>
         <br />
-        <button className="px-9 py-3 btn-primary">
-          Create Resume for free
-        </button>
+        <Link to="/login">
+          <button className="px-9 py-3 btn-primary">
+            Create Resume for free
+          </button>
+        </Link>
       </div>
       <div className="w-1/2">
         <div
@@ -29,3 +35,4 @@ export const Presentation = () => {
     </div>
   );
 };
+

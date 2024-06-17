@@ -1,20 +1,24 @@
+// src/components/Navbar.js
+
+import { Link } from 'react-router-dom';
+
 export const Navbar = () => {
   const options = [
     {
       name: "Home",
-      link: "",
+      link: "/home",  // Update the link paths as needed
     },
     {
       name: "Template",
-      link: "",
+      link: "/templates",
     },
     {
       name: "Join us",
-      link: "",
+      link: "/login",
     },
     {
       name: "About",
-      link: "",
+      link: "/about",
     },
   ];
 
@@ -27,15 +31,17 @@ export const Navbar = () => {
       <ul className="text-xl flex gap-x-12">
         {options.map((option, idx) => (
           <li key={idx}>
-            <a href={option.link}>{option.name}</a>
+            <Link to={option.link}>
+              {option.name}
+            </Link>
           </li>
         ))}
       </ul>
-      <div className=" text-xl flex flex-nowrap gap-x-7">
+      <div className="text-xl flex flex-nowrap gap-x-7">
         <button>English</button>
-        <button className="btn-primary py-3 px-10">
-          Start
-        </button>
+        <Link to="/login">
+          <button className="btn-primary py-3 px-10">Start</button>
+        </Link>
       </div>
     </nav>
   );

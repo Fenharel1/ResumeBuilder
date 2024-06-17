@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const Features = () => {
   return (
     <>
@@ -50,9 +52,11 @@ export const Features = () => {
             One of the most used websites for create resumes, easy and fast!
             with professional templates!
           </p>
+          <Link to={"/cv"}>
           <button className="btn-primary py-3 px-5 text-lg">
             Create Resume for free
           </button>
+          </Link>
         </div>
         <div className="w-1/2 z-20">
           <div
