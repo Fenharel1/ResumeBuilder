@@ -12,7 +12,7 @@ export const Navbar = () => {
     },
     {
       name: "Join us",
-      link: "/register",
+      link: "/login",
     },
     {
       name: "About",
