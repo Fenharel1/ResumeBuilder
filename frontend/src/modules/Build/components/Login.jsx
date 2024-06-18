@@ -1,7 +1,7 @@
+// src/components/Login.js
 import React, { useState } from 'react';
-import axios from 'axios';
+import { login, loginWithGoogle, loginWithGitHub, loginWithLinkedIn } from '../../../services/api';
 import { NavLink } from 'react-router-dom';
-
 import { Navbar } from '../../Landing/components/Navbar';
 
 const Login = () => {
@@ -12,21 +12,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await login({ email, password });
       localStorage.setItem('token', response.data.token);
       // Redirect to the profile or dashboard page
+      window.location.href = '/profile'; // Adjust according to your route
     } catch (error) {
       setError('Invalid credentials');
     }
   };
 
-//  const handleOAuthLogin = (provider) => {
-//    window.location.href = `/api/auth/${provider}`;
-//  };
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <Navbar></Navbar>
+      <Navbar />
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-md rounded-md">
         <h2 className="text-2xl font-bold text-center">Login</h2>
         {error && <p className="text-red-500">{error}</p>}
@@ -55,8 +52,19 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div>
-            <p className=' text-center'>Don't have an account <NavLink to='/register'><a className=' text-purple-500 underline'> Register Now</a></NavLink></p>
+        <div className="flex flex-col items-center">
+          <button onClick={loginWithGoogle} className="flex items-center justify-center w-full p-2 mt-4 text-black border rounded-md">
+            <FcGoogle className="mr-2" /> Login with Google
+          </button>
+          <button onClick={loginWithGitHub} className="flex items-center justify-center w-full p-2 mt-4 text-black border rounded-md">
+            <FaGithub className="mr-2" /> Login with GitHub
+          </button>
+          <button onClick={loginWithLinkedIn} className="flex items-center justify-center w-full p-2 mt-4 text-black border rounded-md">
+            <FaLinkedin className="mr-2" /> Login with LinkedIn
+          </button>
+          <p className="mt-4 text-center">
+            Don't have an account? <NavLink to="/register" className="text-purple-500 underline">Register Now</NavLink>
+          </p>
         </div>
       </div>
     </div>

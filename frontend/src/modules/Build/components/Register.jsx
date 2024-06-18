@@ -1,5 +1,6 @@
+// src/components/Register.js
 import React, { useState } from 'react';
-import axios from 'axios';
+import { register, loginWithGoogle, loginWithGitHub, loginWithLinkedIn } from '../../../services/api';
 import { Navbar } from '../../Landing/components/Navbar';
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -15,21 +16,18 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/register', { name, email, password });
+      const response = await register({ name, email, password });
       localStorage.setItem('token', response.data.token);
       // Redirect to the profile or dashboard page
+      window.location.href = '/profile'; // Adjust according to your route
     } catch (error) {
       setError('Error registering user');
     }
   };
 
-  const handleOAuthRegister = (provider) => {
-    window.location.href = `/api/auth/${provider}`;
-  };
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <Navbar></Navbar>
+      <Navbar />
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-md rounded-md">
         <h2 className="text-2xl font-bold text-center">Register</h2>
         {error && <p className="text-red-500">{error}</p>}
@@ -68,23 +66,22 @@ const Register = () => {
             Register
           </button>
         </form>
-        <div className="flex justify-center mt-6 flex-col">
-            <p className='text-center'>Sign in with</p>
-        <div className='flex flex-row mt-6 justify-center w-full'>
-          <button onClick={() => handleOAuthRegister('google')} className="w-1/3 p-2  flex flex-col text-black">
-            <FcGoogle className=' w-1/2 h-10'/>
-            <p className='text-center mt-2'>Google</p>
+        <div className="flex flex-col items-center">
+          <p className="mt-4">Sign in with</p>
+          <div className="flex mt-6 justify-center w-full space-x-4">
+            <button onClick={loginWithGoogle} className="flex items-center justify-center w-1/3 p-2 text-black border rounded-md">
+              <FcGoogle className="mr-2 h-6 w-6" /> Google
             </button>
-          <button onClick={() => handleOAuthRegister('github')} className="w-1/3 p-2 flex flex-col justify-center text-black">
-            <FaGithub className=' w-1/2 h-10' />
-            <p className='text-center mt-2'>Github</p>
-          </button>
-          <button onClick={() => handleOAuthRegister('linkedin')} className="w-1/3 p-2 flex flex-col text-black">
-            <FaLinkedin className=' w-1/2 h-10' />
-            <p className='text-center mt-2'>LinkedIn</p>
-          </button>
+            <button onClick={loginWithGitHub} className="flex items-center justify-center w-1/3 p-2 text-black border rounded-md">
+              <FaGithub className="mr-2 h-6 w-6" /> GitHub
+            </button>
+            <button onClick={loginWithLinkedIn} className="flex items-center justify-center w-1/3 p-2 text-black border rounded-md">
+              <FaLinkedin className="mr-2 h-6 w-6" /> LinkedIn
+            </button>
           </div>
-          <p className=' text-center'>Already have an account <NavLink to='/login'><a className=' text-purple-500 underline'> Login</a></NavLink></p>
+          <p className="mt-4 text-center">
+            Already have an account? <NavLink to="/login" className="text-purple-500 underline">Login</NavLink>
+          </p>
         </div>
       </div>
     </div>

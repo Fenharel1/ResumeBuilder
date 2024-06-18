@@ -6,6 +6,7 @@ import { TemplateSelector } from "../modules/Build/pages/TemplateSelector";
 import { ResumeBuilder } from "../modules/Build/pages/ResumeBuilder";
 import Register from "../modules/Build/components/Register";
 import Login from "../modules/Build/components/Login";
+import OAuthCallback from "../modules/Build/components/OAuthCallback";
 
 export const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ export const AppRoutes = () => {
       <Route path="/home" element={<LandingPage></LandingPage>}></Route>
       <Route path="/register" element={<Register/>}/>
       <Route path="/login" element={<Login/>}/>
+      <Route path="/auth/callback" element={<OAuthCallback />} />
       <Route path="/*" element={<Navigate to="/home"></Navigate>}></Route>
     </Routes>
   );
