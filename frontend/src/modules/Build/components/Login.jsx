@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { login, loginWithGoogle, loginWithGitHub, loginWithLinkedIn } from '../../../services/api';
 import { NavLink } from 'react-router-dom';
 import { Navbar } from '../../Landing/components/Navbar';
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -53,15 +56,17 @@ const Login = () => {
           </button>
         </form>
         <div className="flex flex-col items-center">
-          <button onClick={loginWithGoogle} className="flex items-center justify-center w-full p-2 mt-4 text-black border rounded-md">
-            <FcGoogle className="mr-2" /> Login with Google
-          </button>
-          <button onClick={loginWithGitHub} className="flex items-center justify-center w-full p-2 mt-4 text-black border rounded-md">
-            <FaGithub className="mr-2" /> Login with GitHub
-          </button>
-          <button onClick={loginWithLinkedIn} className="flex items-center justify-center w-full p-2 mt-4 text-black border rounded-md">
-            <FaLinkedin className="mr-2" /> Login with LinkedIn
-          </button>
+        <div className="flex mt-6 justify-center w-full space-x-4">
+            <button onClick={loginWithGoogle} className="flex items-center justify-center w-1/3 p-2 text-black border rounded-md">
+              <FcGoogle className="mr-2 h-6 w-6" /> Google
+            </button>
+            <button onClick={loginWithGitHub} className="flex items-center justify-center w-1/3 p-2 text-black border rounded-md">
+              <FaGithub className="mr-2 h-6 w-6" /> GitHub
+            </button>
+            <button onClick={loginWithLinkedIn} className="flex items-center justify-center w-1/3 p-2 text-black border rounded-md">
+              <FaLinkedin className="mr-2 h-6 w-6" /> LinkedIn
+            </button>
+          </div>
           <p className="mt-4 text-center">
             Don't have an account? <NavLink to="/register" className="text-purple-500 underline">Register Now</NavLink>
           </p>
