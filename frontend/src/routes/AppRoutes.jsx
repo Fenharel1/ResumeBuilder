@@ -7,6 +7,7 @@ import { ResumeBuilder } from "../modules/Build/pages/ResumeBuilder";
 import Register from "../modules/Build/components/Register";
 import Login from "../modules/Build/components/Login";
 import OAuthCallback from "../modules/Build/components/OAuthCallback";
+import Dashboard from "../modules/Build/components/Dashboard";
 
 export const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ export const AppRoutes = () => {
       <Route path="/home" element={<LandingPage></LandingPage>}></Route>
       <Route path="/register" element={<Register/>}/>
       <Route path="/login" element={<Login/>}/>
+      <Route path="/dashbord" element={<Dashboard/>}/>
       <Route path="/auth/callback" element={<OAuthCallback />} />
       <Route path="/*" element={<Navigate to="/home"></Navigate>}></Route>
     </Routes>
