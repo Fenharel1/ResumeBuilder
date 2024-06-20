@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ResumeContext } from "../context/resumeContext";
+import { generatePDF } from "../../../tools/generatePDF"; // Adjust the path as necessary
 
 export const FifthStep = () => {
   const [certificate, setCertificate] = useState({
@@ -8,6 +10,7 @@ export const FifthStep = () => {
     description: "",
   });
   const [certificateList, setCertificateList] = useState([]);
+  const { resumeData, setStep } = useContext(ResumeContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +20,11 @@ export const FifthStep = () => {
   const addCertificate = () => {
     setCertificateList([...certificateList, certificate]);
     setCertificate({ title: "", issuer: "", date: "", description: "" });
+  };
+
+  const handleGenerateCV = () => {
+    const completeData = { ...resumeData, certificates: certificateList };
+    generatePDF(completeData);
   };
 
   return (
@@ -81,6 +89,13 @@ export const FifthStep = () => {
           </div>
         ))}
       </div>
+      <button
+        className="btn-primary py-3 px-10"
+        onClick={handleGenerateCV}
+        disabled={'Please Enter Information on the empty Fields'}
+      >
+        Generate CV
+      </button>
     </div>
   );
 };

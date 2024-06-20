@@ -8,7 +8,7 @@ export const Navbar = () => {
     },
     {
       name: "Template",
-      link: "/dashbord",
+      link: "/templates",
     },
     {
       name: "Join us",
