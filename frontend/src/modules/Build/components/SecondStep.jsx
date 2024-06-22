@@ -35,6 +35,7 @@ export const SecondStep = () => {
 
   const onRemoveEducation = (e, id) => {
     e.preventDefault();
+    console.log(id, fields);
     remove(id);
   };
 

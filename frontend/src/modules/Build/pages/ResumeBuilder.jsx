@@ -24,6 +24,9 @@ const ProgressLabel = ({ label, idx, final }) => {
           {label}
         </div>
       )}
+      {/* <div className={`w-full py-3 px-10 ${step >= idx ? 'btn-primary' : '!bg-white !border-primary !border-[3px] text-black'}`}> */}
+      {/*   {label} */}
+      {/* </div> */}
     </>
   );
 };

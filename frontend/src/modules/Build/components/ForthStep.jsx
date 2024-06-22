@@ -15,7 +15,6 @@ export const FourthStep = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     setResume({ ...resume, contact: data });
     setStep(4);
   };
@@ -53,8 +52,8 @@ export const FourthStep = () => {
           <input
             className="basic-input"
             type="url"
-            id="linkedin"
-            {...register("linkedin")}
+            id="linkedIn"
+            {...register("linkedIn")}
           />
           <ErrorHint error={errors.linkedin}></ErrorHint>
         </div>

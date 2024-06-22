@@ -33,6 +33,7 @@ export const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashbord" element={<Dashboard/>}/>
+        <Route path="/template" element= {<TemplateSelector/>}/>
         <Route path="/auth/callback" element={<OAuthCallback />} />
         <Route path="/*" element={<Navigate to="/home"></Navigate>}></Route>
       </Routes>

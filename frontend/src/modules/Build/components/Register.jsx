@@ -5,21 +5,22 @@ import { Navbar } from '../../Landing/components/Navbar';
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await register({ name, email, password });
       localStorage.setItem('token', response.data.token);
-      // Redirect to the profile or dashboard page
-      window.location.href = '/profile'; // Adjust according to your route
+      localStorage.setItem('user', JSON.stringify({ name, email }));
+      navigate('/dashbord'); // Adjust according to your route
     } catch (error) {
       setError('Error registering user');
     }
