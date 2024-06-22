@@ -78,8 +78,10 @@ export const ResumeViewer = () => {
           <div className="space-y-5">
             {pdfData ? (
               <>
-                <Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`}>
-                  <Viewer fileUrl={pdfData} />
+                <Worker workerUrl={`https://unpkg.com/pdfjs-dist@2.11.338/build/pdf.worker.min.js`}>
+                  <div style={{ height: '500px', width: '100%' }}>
+                    <Viewer fileUrl={pdfData} />
+                  </div>
                 </Worker>
                 <button
                   className="btn-primary px-4 py-2 mx-auto"
