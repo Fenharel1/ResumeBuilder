@@ -30,5 +30,12 @@ export const ResumeModel = {
     phone: "",
     linkedIn: "",
   },
-  certificates: [],
+  certificates: [
+    {
+      title: "",
+      issuer: "",
+      date: "",
+      description: "",
+    },
+  ],
 };

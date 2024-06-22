@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ResumeContext } from "../context/resumeContext";
-import { generatePDF } from "../../../tools/generatePDF"; // Adjust the path as necessary
 
 export const FifthStep = () => {
   const [certificate, setCertificate] = useState({
@@ -10,7 +9,8 @@ export const FifthStep = () => {
     description: "",
   });
   const [certificateList, setCertificateList] = useState([]);
-  const { resumeData, setStep } = useContext(ResumeContext);
+  const { resumeData, setResumeData, setStep } = useContext(ResumeContext);
+  const [isFormComplete, setIsFormComplete] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,9 +22,42 @@ export const FifthStep = () => {
     setCertificate({ title: "", issuer: "", date: "", description: "" });
   };
 
-  const handleGenerateCV = () => {
+  useEffect(() => {
+    // Check if all fields are filled
+    const isComplete = Object.values(resumeData.personal).every(field => field) &&
+                       resumeData.education.every(edu => Object.values(edu).every(field => field)) &&
+                       resumeData.experience.every(exp => Object.values(exp).every(field => field)) &&
+                       Object.values(resumeData.contact).every(field => field);
+    setIsFormComplete(isComplete);
+  }, [resumeData]);
+
+  const handleGenerateCV = async () => {
     const completeData = { ...resumeData, certificates: certificateList };
-    generatePDF(completeData);
+
+    try {
+      const response = await fetch('http://localhost:5000/generate-cv', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(completeData),
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else {
+        console.error('Failed to generate CV');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -73,10 +106,7 @@ export const FifthStep = () => {
           onChange={handleChange}
         />
       </div>
-      <button
-        className="btn-primary py-3 px-10"
-        onClick={addCertificate}
-      >
+      <button className="btn-primary py-3 px-10" onClick={addCertificate}>
         Add Certificate
       </button>
       <div className="space-y-4">
@@ -92,7 +122,7 @@ export const FifthStep = () => {
       <button
         className="btn-primary py-3 px-10"
         onClick={handleGenerateCV}
-        disabled={'Please Enter Information on the empty Fields'}
+        disabled={!isFormComplete}
       >
         Generate CV
       </button>
