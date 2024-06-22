@@ -31,7 +31,7 @@ app.use('/api/auth', authRoutes);
 app.post('/api/generate-pdf', (req, res) => {
   const { personal, education, experience, contact } = req.body;
 
-  const doc = new PDFDocument({ size: 'A4', margin: 50 });
+  const doc = new PDFDocument({ margin: 50 });
   let buffers = [];
   doc.on('data', buffers.push.bind(buffers));
   doc.on('end', () => {
@@ -45,38 +45,37 @@ app.post('/api/generate-pdf', (req, res) => {
       .end(pdfData);
   });
 
-  // Add personal information
+  // Add personal and contact information
   doc.fontSize(25).text('Resume', { align: 'center' });
   doc.moveDown();
-  doc.fontSize(20).text(`Name: ${personal.firstname} ${personal.lastname}`);
-  doc.fontSize(20).text(`Profession: ${personal.profession}`);
-  doc.fontSize(15).text(`Address: ${personal.address}, ${personal.city}, ${personal.state}, ${personal.zipcode}`);
-  doc.fontSize(15).text(`Email: ${contact.email}`);
-  doc.fontSize(15).text(`Phone: ${contact.phone}`);
+  doc.fontSize(20).text(`${personal.firstname} ${personal.lastname}`, { align: 'center' });
+  doc.fontSize(15).text(`${personal.profession}`, { align: 'center' });
+  doc.fontSize(12).text(`${personal.address}, ${personal.city}, ${personal.state}, ${personal.zipcode}`, { align: 'center' });
+  doc.fontSize(12).text(`Email: ${contact.email}`, { align: 'center' });
+  doc.fontSize(12).text(`Phone: ${contact.phone}`, { align: 'center' });
   if (contact.linkedIn) {
-    doc.fontSize(15).text(`LinkedIn: ${contact.linkedIn}`);
+    doc.fontSize(12).text(`LinkedIn: ${contact.linkedIn}`, { align: 'center' });
   }
 
-  doc.addPage();
+  doc.moveDown();
 
-  // Add education
+  // Add education section
   doc.fontSize(18).text('Education', { underline: true });
   education.forEach(edu => {
-    doc.moveDown();
+    doc.moveDown(0.5);
     doc.fontSize(15).text(`${edu.degree} in ${edu.fieldOfStudy}`);
     doc.fontSize(12).text(`School: ${edu.school}`);
     doc.fontSize(12).text(`Graduation Year: ${edu.graduationYear}`);
   });
 
-  doc.addPage();
+  doc.moveDown();
 
-  // Add work experience
+  // Add work experience section
   doc.fontSize(18).text('Work Experience', { underline: true });
   experience.forEach(exp => {
-    doc.moveDown();
+    doc.moveDown(0.5);
     doc.fontSize(15).text(`${exp.position} at ${exp.company}`);
-    doc.fontSize(12).text(`Start Date: ${exp.startDate}`);
-    doc.fontSize(12).text(`End Date: ${exp.endDate}`);
+    doc.fontSize(12).text(`Start Date: ${exp.startDate} - End Date: ${exp.endDate}`);
     doc.fontSize(12).text(exp.description);
   });
 
