@@ -2,15 +2,35 @@ import { useContext, useState } from "react";
 import { ResumeContext } from "../context/resumeContext";
 import { useNavigate } from "react-router-dom";
 import { ResumeModel } from "../models/model";
+import { Worker, Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
 
 export const ResumeViewer = () => {
   const [generate, setGenerate] = useState(false);
+  const [pdfData, setPdfData] = useState(null);
   const { resume, setStep, setResume } = useContext(ResumeContext);
   const navigate = useNavigate();
 
-  const getPDF = () => {
-    // send resume data to api
-    console.log(resume);
+  const getPDF = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(resume),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setPdfData(url);
+    } catch (error) {
+      console.error('Failed to generate PDF', error);
+    }
   };
 
   const onGenerate = () => {
@@ -18,8 +38,11 @@ export const ResumeViewer = () => {
     getPDF();
   };
 
-  const onDownladPDF = () => {
-    console.log("downloaded!");
+  const onDownloadPDF = () => {
+    const link = document.createElement('a');
+    link.href = pdfData;
+    link.download = 'resume.pdf';
+    link.click();
   };
 
   const goHome = () => {
@@ -51,18 +74,23 @@ export const ResumeViewer = () => {
         </div>
       ) : (
         <div className="text-center flex flex-col justify-center items-center gap-y-10">
-          <p className="text-3xl">Here is your resume {"in"} pdf! enjoy it!</p>
+          <p className="text-3xl">Here is your resume in PDF! Enjoy it!</p>
           <div className="space-y-5">
-            {/* PDF GOES HERE */}
-            <div className="bg-gray-200 h-[400px] w-[290px] text-center">
-              PDF GOES HERE
-            </div>
-            <button
-              className="btn-primary px-4 py-2 mx-auto"
-              onClick={() => onDownladPDF()}
-            >
-              Download PDF
-            </button>
+            {pdfData ? (
+              <>
+                <Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`}>
+                  <Viewer fileUrl={pdfData} />
+                </Worker>
+                <button
+                  className="btn-primary px-4 py-2 mx-auto"
+                  onClick={onDownloadPDF}
+                >
+                  Download PDF
+                </button>
+              </>
+            ) : (
+              <div>Loading PDF...</div>
+            )}
           </div>
           <div className="w-full flex flex-row gap-x-5 justify-end items-center">
             <button

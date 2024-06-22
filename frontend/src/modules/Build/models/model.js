@@ -25,10 +25,11 @@ export const ResumeModel = {
       description: "",
     },
   ],
-  contact: {
+  contact: [
+    {
     email: "",
     phone: "",
     linkedIn: "",
   },
-  certificates: [],
+]
 };
