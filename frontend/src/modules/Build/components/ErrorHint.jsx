@@ -1,5 +1,3 @@
-import { useForm } from "react-hook-form";
-
 export const ErrorHint = ({ error }) => {
   return (
     <>

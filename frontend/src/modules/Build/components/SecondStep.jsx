@@ -1,126 +1,148 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ResumeContext } from "../context/resumeContext";
 import { LuArrowLeft } from "react-icons/lu";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { ErrorHint } from "./ErrorHint";
+import { IoClose } from "react-icons/io5";
+
+const educationItem = {
+  school: "",
+  graduationYear: "",
+  degree: "",
+  fieldOfStudy: "",
+};
 
 export const SecondStep = () => {
-  const { resume, setResume, setStep } = useContext(ResumeContext);
+  const { setStep, setResume, resume } = useContext(ResumeContext);
   const {
     register,
+    control,
     formState: { errors },
     handleSubmit,
-  } = useForm();
-
-  const [education, setEducation] = useState({
-    school: "",
-    degree: "diploma",
-    fieldOfStudy: "",
-    graduationYear: "",
+  } = useForm({
+    defaultValues: { education: resume.education || educationItem },
   });
-  const [educationList, setEducationList] = useState([]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEducation((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const addEducation = () => {
-    setEducationList([...educationList, education]);
-    setEducation({
-      school: "",
-      degree: "diploma",
-      fieldOfStudy: "",
-      graduationYear: "",
-    });
-  };
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "education",
+  });
 
   const onSubmit = (data) => {
-    console.log(data);
+    setResume({ ...resume, education: data.education });
+    setStep(2);
+  };
+
+  const onRemoveEducation = (e, id) => {
+    e.preventDefault();
+    remove(id);
+  };
+
+  const onAddEducation = () => {
+    append({ ...educationItem });
   };
 
   return (
-    <form
-      className="text-xl space-y-10 pb-24"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <p className="font-bold text-2xl">Education</p>
-      <div className="flex gap-x-10 w-full">
-        <div className="w-full space-y-4">
-          <div>School Name</div>
-          <input
-            id="school"
-            className="basic-input"
-            onChange={handleChange}
-            {...register("school", { required: "School is required" })}
-          />
-          <ErrorHint error={errors.school}></ErrorHint>
-        </div>
-        <div className="w-full space-y-4">
-          <div>Degree</div>
-          <select
-            id="degree"
-            className="basic-input"
-            onChange={handleChange}
-            {...register("degree", { required: "Degree is required" })}
-          >
-            <option value="diploma">Diploma</option>
-            <option value="degree">Degree</option>
-            <option value="masters">{"Master's"}</option>
-            <option value="certificate">Certificate</option>
-          </select>
-          <ErrorHint error={errors.degree}></ErrorHint>
-        </div>
+    <>
+      <div>
+        <div className="font-bold text-2xl float-left">Education</div>
+        <button
+          type="button"
+          className="btn-primary py-3 px-10 float-right"
+          onClick={() => onAddEducation()}
+        >
+          Add Education
+        </button>
       </div>
-      <div className="flex gap-x-10 w-full">
-        <div className="w-full space-y-4">
-          <div>Field of Study</div>
-          <input
-            className="basic-input"
-            type="text"
-            id="fieldOfStudy"
-            {...register("fieldOfStudy", { required: "Required" })}
-          />
-          <ErrorHint error={errors.fieldOfStudy}></ErrorHint>
-        </div>
-        <div className="w-full space-y-4">
-          <div>Graduation Year</div>
-          <input
-            className="basic-input"
-            id="graduationYear"
-            {...register("graduationYear", { required: "Date is required" })}
-          />
-          <ErrorHint error={errors.graduationYear}></ErrorHint>
-        </div>
-      </div>
-      <button
-        type="button"
-        className="btn-primary py-3 px-10"
-        onClick={addEducation}
+      <form
+        className="w-full space-y-5 max-h-[25rem] overflow-auto"
+        onSubmit={handleSubmit(onSubmit)}
       >
-        Add Education
-      </button>
-      <div className="space-y-4">
-        {educationList.map((edu, index) => (
-          <div key={index} className="p-4 border rounded-lg shadow-md">
-            <p className="font-bold">{edu.school}</p>
-            <p>{edu.degree}</p>
-            <p>{edu.fieldOfStudy}</p>
-            <p>{edu.graduationYear}</p>
+        {fields.map((item, index) => (
+          <div
+            key={item.id}
+            className="text-xl space-y-10 border px-10 pb-10 pt-8 rounded-xl relative"
+          >
+            <div className="flex gap-x-10 w-full">
+              <div className="w-full space-y-4">
+                <div>School Name</div>
+                <input
+                  id={`education[${index}].school`}
+                  className="basic-input"
+                  {...register(`education[${index}].school`, {
+                    required: "School is required",
+                  })}
+                  defaultValue={item.school}
+                />
+                <ErrorHint error={errors?.education?.[index]?.school} />
+              </div>
+              <div className="w-full space-y-4">
+                <div>Degree</div>
+                <select
+                  id={`education[${index}].degree`}
+                  className="basic-input"
+                  {...register(`education[${index}].degree`, {
+                    required: "Degree is required",
+                  })}
+                  defaultValue={item.degree}
+                >
+                  <option value="diploma">Diploma</option>
+                  <option value="degree">Degree</option>
+                  <option value="masters">{"Master's"}</option>
+                  <option value="certificate">Certificate</option>
+                </select>
+                <ErrorHint error={errors?.education?.[index]?.degree} />
+              </div>
+            </div>
+            <div className="flex gap-x-10 w-full">
+              <div className="w-full space-y-4">
+                <div>Field of Study</div>
+                <input
+                  className="basic-input"
+                  type="text"
+                  id={`education[${index}].fieldOfStudy`}
+                  {...register(`education[${index}].fieldOfStudy`, {
+                    required: "Required",
+                  })}
+                  defaultValue={item.fieldOfStudy}
+                />
+                <ErrorHint error={errors?.education?.[index]?.fieldOfStudy} />
+              </div>
+              <div className="w-full space-y-4">
+                <div>Graduation Year</div>
+                <input
+                  className="basic-input"
+                  id={`education[${index}].graduationYear`}
+                  {...register(`education[${index}].graduationYear`, {
+                    required: "Date is required",
+                  })}
+                  defaultValue={item.graduationYear}
+                />
+                <ErrorHint error={errors?.education?.[index]?.graduationYear} />
+              </div>
+            </div>
+
+            <button
+              className="font-bold text-3xl absolute -top-8 right-8"
+              onClick={(e) => onRemoveEducation(e, item.id)}
+            >
+              <IoClose></IoClose>
+            </button>
           </div>
         ))}
-      </div>
-      <div className="absolute bottom-11 right-11 left-11">
-        <button
-          className="text-4xl float-left font-bold flex items-center"
-          onClick={(e) => setStep(0)}
-        >
-          <LuArrowLeft />
-        </button>
-        <button type="submit" className="btn-primary float-right py-3 px-10">
-          Next step
-        </button>
-      </div>
-    </form>
+
+        <div className="absolute bottom-11 right-11 left-11">
+          <button
+            className="text-4xl float-left font-bold flex items-center"
+            onClick={() => setStep(0)}
+          >
+            <LuArrowLeft />
+          </button>
+          <button type="submit" className="btn-primary float-right py-3 px-10">
+            Next step
+          </button>
+        </div>
+      </form>
+    </>
   );
 };

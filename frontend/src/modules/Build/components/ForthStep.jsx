@@ -1,98 +1,77 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { ResumeContext } from "../context/resumeContext";
+import { LuArrowLeft } from "react-icons/lu";
+import { useForm } from "react-hook-form";
+import { ErrorHint } from "./ErrorHint";
 
 export const FourthStep = () => {
-  const [contactInfo, setContactInfo] = useState({
-    email: "",
-    phone: "",
-    linkedin: "",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
+  const { resume, setResume, setStep } = useContext(ResumeContext);
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+  } = useForm({
+    defaultValues: resume.contact,
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setContactInfo((prev) => ({ ...prev, [name]: value }));
+  const onSubmit = (data) => {
+    console.log(data);
+    setResume({ ...resume, contact: data });
+    setStep(4);
   };
 
   return (
-    <div className="text-xl space-y-10">
+    <div className="text-xl space-y-5">
       <p className="font-bold text-2xl">Contact Information</p>
-      <div className="flex gap-x-10 w-full">
-        <div className="w-full space-y-4">
-          <div>Email</div>
-          <input
-            className="basic-input"
-            type="email"
-            name="email"
-            value={contactInfo.email}
-            onChange={handleChange}
-          />
+      <form className="space-y-10 pb-24" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex gap-x-10 w-full">
+          <div className="w-full space-y-4">
+            <div>Email</div>
+            <input
+              className="basic-input"
+              type="email"
+              id="email"
+              {...register("email", { required: "Email is required" })}
+            />
+            <ErrorHint error={errors.email}></ErrorHint>
+          </div>
+          <div className="w-full space-y-4">
+            <div>Phone</div>
+            <input
+              className="basic-input"
+              type="tel"
+              id="phone"
+              {...register("phone", { required: "Phone is required" })}
+            />
+            <ErrorHint error={errors.phone}></ErrorHint>
+          </div>
         </div>
         <div className="w-full space-y-4">
-          <div>Phone</div>
+          <div>
+            LinkedIn Profile <span className="text-gray-400">(Optional)</span>
+          </div>
           <input
             className="basic-input"
-            type="tel"
-            name="phone"
-            value={contactInfo.phone}
-            onChange={handleChange}
+            type="url"
+            id="linkedin"
+            {...register("linkedin")}
           />
+          <ErrorHint error={errors.linkedin}></ErrorHint>
         </div>
-      </div>
-      <div className="w-full space-y-4">
-        <div>LinkedIn Profile</div>
-        <input
-          className="basic-input"
-          type="url"
-          name="linkedin"
-          value={contactInfo.linkedin}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="w-full space-y-4">
-        <div>Address</div>
-        <input
-          className="basic-input"
-          type="text"
-          name="address"
-          value={contactInfo.address}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="flex gap-x-10">
-        <div className="w-full space-y-4">
-          <div>City</div>
-          <input
-            className="basic-input"
-            type="text"
-            name="city"
-            value={contactInfo.city}
-            onChange={handleChange}
-          />
+
+        <div className="absolute bottom-11 right-11 left-11">
+          <button
+            className="text-4xl float-left font-bold flex items-center"
+            type="button"
+            onClick={() => setStep(2)}
+          >
+            <LuArrowLeft />
+          </button>
+          <button type="submit" className="btn-primary float-right py-3 px-10">
+            Next step
+          </button>
         </div>
-        <div className="w-full space-y-4">
-          <div>State</div>
-          <input
-            className="basic-input"
-            type="text"
-            name="state"
-            value={contactInfo.state}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="w-full space-y-4">
-          <div>Zip Code</div>
-          <input
-            className="basic-input"
-            type="text"
-            name="zipCode"
-            value={contactInfo.zipCode}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
+      </form>
     </div>
   );
 };

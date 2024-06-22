@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ResumeContext } from "../context/resumeContext";
 import { useForm } from "react-hook-form";
 import { ErrorHint } from "./ErrorHint";
@@ -9,20 +9,13 @@ export const FirstStep = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: resume });
+  } = useForm({ defaultValues: resume.personal });
 
   const onSubmit = (data) => {
-    const { firstname, lastname, profession, address, city, state, zipcode } =
-      data;
+    console.log(data);
     setResume({
       ...resume,
-      firstname,
-      lastname,
-      profession,
-      address,
-      city,
-      state,
-      zipcode,
+      personal: data,
     });
     setStep(1);
   };
