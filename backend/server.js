@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
+const aiService = require('./services/aiService'); // Import AI service
 const errorHandler = require('./middleware/errorHandler');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -31,7 +32,7 @@ app.use('/api/auth', authRoutes);
 app.post('/api/generate-pdf', (req, res) => {
   const { personal, education, experience, contact } = req.body;
 
-  const doc = new PDFDocument({ margin: 50 });
+  const doc = new PDFDocument();
   let buffers = [];
   doc.on('data', buffers.push.bind(buffers));
   doc.on('end', () => {
@@ -45,41 +46,51 @@ app.post('/api/generate-pdf', (req, res) => {
       .end(pdfData);
   });
 
-  // Add personal and contact information
+  // Add personal information
   doc.fontSize(25).text('Resume', { align: 'center' });
   doc.moveDown();
-  doc.fontSize(20).text(`${personal.firstname} ${personal.lastname}`, { align: 'center' });
-  doc.fontSize(15).text(`${personal.profession}`, { align: 'center' });
-  doc.fontSize(12).text(`${personal.address}, ${personal.city}, ${personal.state}, ${personal.zipcode}`, { align: 'center' });
-  doc.fontSize(12).text(`Email: ${contact.email}`, { align: 'center' });
-  doc.fontSize(12).text(`Phone: ${contact.phone}`, { align: 'center' });
+  doc.fontSize(20).text(`Name: ${personal.firstname} ${personal.lastname}`);
+  doc.fontSize(20).text(`Profession: ${personal.profession}`);
+  doc.fontSize(15).text(`Address: ${personal.address}, ${personal.city}, ${personal.state}, ${personal.zipcode}`);
+  doc.fontSize(15).text(`Email: ${contact.email}`);
+  doc.fontSize(15).text(`Phone: ${contact.phone}`);
   if (contact.linkedIn) {
-    doc.fontSize(12).text(`LinkedIn: ${contact.linkedIn}`, { align: 'center' });
+    doc.fontSize(15).text(`LinkedIn: ${contact.linkedIn}`);
   }
 
-  doc.moveDown();
-
-  // Add education section
+  // Add education
   doc.fontSize(18).text('Education', { underline: true });
   education.forEach(edu => {
-    doc.moveDown(0.5);
+    doc.moveDown();
     doc.fontSize(15).text(`${edu.degree} in ${edu.fieldOfStudy}`);
     doc.fontSize(12).text(`School: ${edu.school}`);
     doc.fontSize(12).text(`Graduation Year: ${edu.graduationYear}`);
   });
 
-  doc.moveDown();
-
-  // Add work experience section
+  // Add work experience
+  doc.addPage();
   doc.fontSize(18).text('Work Experience', { underline: true });
   experience.forEach(exp => {
-    doc.moveDown(0.5);
+    doc.moveDown();
     doc.fontSize(15).text(`${exp.position} at ${exp.company}`);
-    doc.fontSize(12).text(`Start Date: ${exp.startDate} - End Date: ${exp.endDate}`);
+    doc.fontSize(12).text(`Start Date: ${exp.startDate}`);
+    doc.fontSize(12).text(`End Date: ${exp.endDate}`);
     doc.fontSize(12).text(exp.description);
   });
 
   doc.end();
+});
+
+// AI Skill Matching Route
+app.post('/api/analyze-job', async (req, res) => {
+  try {
+    const { jobTitle, industry, jobDescription } = req.body;
+    const suggestions = await aiService.analyzeJob(jobTitle, industry, jobDescription);
+    res.json(suggestions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error analyzing job description' });
+  }
 });
 
 // Error handler
