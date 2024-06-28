@@ -26,8 +26,13 @@ export const ResumeViewer = () => {
       }
 
       const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      setPdfData(url);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (error) {
       console.error('Failed to generate PDF', error);
     }
@@ -49,6 +54,7 @@ export const ResumeViewer = () => {
     setResume(ResumeModel);
     navigate("/");
   };
+
 
   return (
     <>
@@ -101,7 +107,7 @@ export const ResumeViewer = () => {
             >
               Back
             </button>
-            <button onClick={() => goHome()} className="btn-primary px-10 py-2">
+            <button onClick={goHome} className="btn-primary px-10 py-2">
               Go Home
             </button>
           </div>
