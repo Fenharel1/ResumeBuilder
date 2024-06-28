@@ -5,17 +5,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
-const aiService = require('./services/aiService'); // Import AI service
 const errorHandler = require('./middleware/errorHandler');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const passport = require('passport');
 const PDFDocument = require('pdfkit'); // Import pdfkit
+const { analyzeJob } = require('./services/aiService'); // Import the analyzeJob function
 require('./config/passport'); // Initialize passport strategies
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const cors = require('cors');
+app.use(cors());
 
 // Middleware setup
 app.use(express.json());
@@ -27,6 +30,18 @@ app.use(passport.initialize());
 // Routes
 app.use('/api', userRoutes);
 app.use('/api/auth', authRoutes);
+
+// AI Analysis Route
+app.post('/api/analyze-job', async (req, res) => {
+  const { jobTitle, industry, jobDescription } = req.body;
+  try {
+    const analysis = await analyzeJob(jobTitle, industry, jobDescription);
+    res.json({ analysis });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred during AI analysis' });
+  }
+});
 
 // PDF Generation Route
 app.post('/api/generate-pdf', (req, res) => {
@@ -58,6 +73,8 @@ app.post('/api/generate-pdf', (req, res) => {
     doc.fontSize(15).text(`LinkedIn: ${contact.linkedIn}`);
   }
 
+  doc.addPage();
+
   // Add education
   doc.fontSize(18).text('Education', { underline: true });
   education.forEach(edu => {
@@ -67,8 +84,9 @@ app.post('/api/generate-pdf', (req, res) => {
     doc.fontSize(12).text(`Graduation Year: ${edu.graduationYear}`);
   });
 
-  // Add work experience
   doc.addPage();
+
+  // Add work experience
   doc.fontSize(18).text('Work Experience', { underline: true });
   experience.forEach(exp => {
     doc.moveDown();
@@ -79,18 +97,6 @@ app.post('/api/generate-pdf', (req, res) => {
   });
 
   doc.end();
-});
-
-// AI Skill Matching Route
-app.post('/api/analyze-job', async (req, res) => {
-  try {
-    const { jobTitle, industry, jobDescription } = req.body;
-    const suggestions = await aiService.analyzeJob(jobTitle, industry, jobDescription);
-    res.json(suggestions);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error analyzing job description' });
-  }
 });
 
 // Error handler

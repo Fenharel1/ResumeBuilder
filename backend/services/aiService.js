@@ -3,27 +3,34 @@ const { Configuration, OpenAIApi } = require('openai');
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
 const openai = new OpenAIApi(configuration);
 
-async function analyzeJob(jobTitle, industry, jobDescription) {
-  const prompt = `
-    Job Title: ${jobTitle}
-    Industry: ${industry}
-    Job Description: ${jobDescription}
-    
-    Based on the above information, suggest the most relevant skills and keywords to include in a CV.
-  `;
+const getJobSuggestions = async (experience, previousJob) => {
+  const prompt = `Based on the following work experience and previous job, suggest relevant job titles and rate the chances of getting those jobs.
+Experience: ${experience}
+Previous Job: ${previousJob}
+Suggestions:`;
 
   const response = await openai.createCompletion({
     model: 'text-davinci-003',
-    prompt: prompt,
+    prompt,
     max_tokens: 150,
+    n: 5,
+    stop: null,
+    temperature: 0.7,
   });
 
-  return response.data.choices[0].text.trim();
-}
+  const suggestions = response.data.choices[0].text.trim().split('\n').map(suggestion => {
+    const [jobTitle, chance] = suggestion.split('-');
+    return {
+      jobTitle: jobTitle.trim(),
+      chance: chance ? parseInt(chance.trim().replace('%', '')) : 0,
+    };
+  });
+
+  return suggestions;
+};
 
 module.exports = {
-  analyzeJob,
+  getJobSuggestions,
 };
