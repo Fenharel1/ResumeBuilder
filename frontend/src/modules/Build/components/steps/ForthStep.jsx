@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { ResumeContext } from "../context/resumeContext";
+import { ResumeContext } from "../../context/resumeContext";
 import { LuArrowLeft } from "react-icons/lu";
 import { useForm } from "react-hook-form";
-import { ErrorHint } from "./ErrorHint";
+import { ErrorHint } from "../stracture/ErrorHint";
 
 export const FourthStep = () => {
   const { resume, setResume, setStep } = useContext(ResumeContext);

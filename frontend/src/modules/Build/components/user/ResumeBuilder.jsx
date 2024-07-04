@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { FirstStep } from "../components/FirstStep";
-import { SecondStep } from "../components/SecondStep";
-import { ThirdStep } from "../components/ThirdStep";
-import { FourthStep } from "../components/ForthStep";
-import { FifthStep } from "../components/FifthStep";
-import { ResumeContext } from "../context/resumeContext";
-import { ResumeViewer } from "../components/ResumeViewer";
-import { JobSuggestion } from "../components/JobSuggestion";
+import { FirstStep } from "../steps/FirstStep";
+import { SecondStep } from "../steps/SecondStep";
+import { ThirdStep } from "../steps/ThirdStep";
+import { FourthStep } from "../steps/ForthStep";
+import { FifthStep } from "../steps/FifthStep";
+import { ResumeContext } from "../../context/resumeContext";
+import { ResumeViewer } from "../steps/ResumeViewer";
+import { JobSuggestion } from "../steps/JobSuggestion";
 
 const ProgressLabel = ({ label, idx, final }) => {
   const { step } = useContext(ResumeContext);

@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
-import { ResumeContext } from "../context/resumeContext";
-import { generatePDF } from "../../../tools/generatePDF"; // Adjust the path as necessary
+import { ResumeContext } from "../../context/resumeContext";
+import { generatePDF } from "../../../../tools/generatePDF"; // Adjust the path as necessary
 
 export const FifthStep = () => {
   const [certificate, setCertificate] = useState({

@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { ResumeContext } from "../context/resumeContext";
+import { ResumeContext } from "../../context/resumeContext";
 import { useForm } from "react-hook-form";
-import { ErrorHint } from "./ErrorHint";
+import { ErrorHint } from "../stracture/ErrorHint";
 
 export const FirstStep = () => {
   const { resume, setResume, setStep } = useContext(ResumeContext);

@@ -1,6 +1,6 @@
 // JobSuggestion.jsx
 import { useContext, useState } from "react";
-import { ResumeContext } from "../context/resumeContext";
+import { ResumeContext } from "../../context/resumeContext";
 import { LuArrowLeft } from "react-icons/lu";
 import { useForm } from "react-hook-form";
 import axios from 'axios';
@@ -8,13 +8,13 @@ import axios from 'axios';
 export const JobSuggestion = () => {
   const { resume, setStep } = useContext(ResumeContext);
   const [suggestions, setSuggestions] = useState([]);
-  const { handleSubmit } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: resume.experience,
   });
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('/api/analyze-job', {
+      const response = await axios.post('http://localhost:5000/api/analyze-job', {  // Update the URL here
         jobTitle: data.jobTitle,
         industry: data.industry,
         jobDescription: data.jobDescription,
@@ -38,6 +38,7 @@ export const JobSuggestion = () => {
               id="jobTitle"
               {...register("jobTitle", { required: "Job Title is required" })}
             />
+            {errors.jobTitle && <span>{errors.jobTitle.message}</span>}
           </div>
           <div className="w-full space-y-4">
             <div>Industry</div>
@@ -47,6 +48,7 @@ export const JobSuggestion = () => {
               id="industry"
               {...register("industry", { required: "Industry is required" })}
             />
+            {errors.industry && <span>{errors.industry.message}</span>}
           </div>
           <div className="w-full space-y-4">
             <div>Job Description</div>
@@ -55,6 +57,7 @@ export const JobSuggestion = () => {
               id="jobDescription"
               {...register("jobDescription", { required: "Job Description is required" })}
             />
+            {errors.jobDescription && <span>{errors.jobDescription.message}</span>}
           </div>
         </div>
         <div className="absolute bottom-11 right-11 left-11">

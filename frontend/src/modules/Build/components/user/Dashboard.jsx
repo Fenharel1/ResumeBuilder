@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Navbar } from '../../Landing/components/Navbar';
+import { Navbar } from '../../../Landing/components/Navbar';
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);

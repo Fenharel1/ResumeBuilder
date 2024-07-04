@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
-import { ResumeContext } from "../context/resumeContext";
+import { ResumeContext } from "../../context/resumeContext";
 import { LuArrowLeft } from "react-icons/lu";
 import { useFieldArray, useForm } from "react-hook-form";
-import { ErrorHint } from "./ErrorHint";
+import { ErrorHint } from "../stracture/ErrorHint";
 import { IoClose } from "react-icons/io5";
 
 const educationItem = {

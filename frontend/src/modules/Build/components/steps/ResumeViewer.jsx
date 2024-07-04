@@ -1,7 +1,8 @@
+// ResumeViewer.jsx
 import { useContext, useState } from "react";
-import { ResumeContext } from "../context/resumeContext";
+import { ResumeContext } from "../../context/resumeContext";
 import { useNavigate } from "react-router-dom";
-import { ResumeModel } from "../models/model";
+import { ResumeModel } from "../../models/model";
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 
@@ -27,12 +28,7 @@ export const ResumeViewer = () => {
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'resume.pdf';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      setPdfData(url);
     } catch (error) {
       console.error('Failed to generate PDF', error);
     }
@@ -55,9 +51,8 @@ export const ResumeViewer = () => {
     navigate("/");
   };
 
-
   return (
-    <>
+    <div>
       {!generate ? (
         <div className="w-full h-full flex flex-col gap-y-10 items-center justify-center">
           <div className="text-2xl">
@@ -113,6 +108,6 @@ export const ResumeViewer = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };

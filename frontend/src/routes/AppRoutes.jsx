@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LandingPage } from "../modules/Landing/LandingPage";
-import { Layout } from "../modules/Build/components/Layout";
+import { Layout } from "../modules/Build/components/stracture/Layout";
 import { IntroductionPage } from "../modules/Build/pages/IntroductionPage";
 import { TemplateSelector } from "../modules/Build/pages/TemplateSelector";
-import { ResumeBuilder } from "../modules/Build/pages/ResumeBuilder";
-import Register from "../modules/Build/components/Register";
-import Login from "../modules/Build/components/Login";
-import OAuthCallback from "../modules/Build/components/OAuthCallback";
-import Dashboard from "../modules/Build/components/Dashboard";
+import { ResumeBuilder } from "../modules/Build/components/user/ResumeBuilder";
+import Register from "../modules/Build/components/user/Register";
+import Login from "../modules/Build/components/user/Login";
+import OAuthCallback from "../modules/Build/components/user/OAuthCallback";
+import Dashboard from "../modules/Build/components/user/Dashboard";
 import { ResumeProvider } from "../modules/Build/context/resumeContext";
 
 export const AppRoutes = () => {

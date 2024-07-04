@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { ResumeContext } from "../context/resumeContext";
+import { ResumeContext } from "../../context/resumeContext";
 import { IoClose } from "react-icons/io5";
-import { ErrorHint } from "./ErrorHint";
+import { ErrorHint } from "../stracture/ErrorHint";
 import { LuArrowLeft } from "react-icons/lu";
 
 const experienceItem = {
