@@ -1,3 +1,4 @@
+// server.js
 const dotenv = require('dotenv');
 dotenv.config(); // Load environment variables first
 
@@ -10,21 +11,18 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const passport = require('passport');
-const PDFDocument = require('pdfkit'); // Import pdfkit
+const PDFDocument = require('pdfkit');
 const { analyzeJob } = require('./services/aiService'); // Import the analyzeJob function
 require('./config/passport'); // Initialize passport strategies
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const cors = require('cors');
-app.use(cors());
-
 // Middleware setup
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(helmet());
-app.use(cors());
+app.use(cors()); // Use cors middleware
 app.use(passport.initialize());
 
 // Routes
@@ -73,8 +71,6 @@ app.post('/api/generate-pdf', (req, res) => {
     doc.fontSize(15).text(`LinkedIn: ${contact.linkedIn}`);
   }
 
-  doc.addPage();
-
   // Add education
   doc.fontSize(18).text('Education', { underline: true });
   education.forEach(edu => {
@@ -83,8 +79,6 @@ app.post('/api/generate-pdf', (req, res) => {
     doc.fontSize(12).text(`School: ${edu.school}`);
     doc.fontSize(12).text(`Graduation Year: ${edu.graduationYear}`);
   });
-
-  doc.addPage();
 
   // Add work experience
   doc.fontSize(18).text('Work Experience', { underline: true });

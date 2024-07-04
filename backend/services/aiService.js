@@ -1,3 +1,4 @@
+// aiService.js
 const { Configuration, OpenAIApi } = require('openai');
 
 const configuration = new Configuration({
@@ -5,17 +6,18 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const getJobSuggestions = async (experience, previousJob) => {
-  const prompt = `Based on the following work experience and previous job, suggest relevant job titles and rate the chances of getting those jobs.
-Experience: ${experience}
-Previous Job: ${previousJob}
+const analyzeJob = async (jobTitle, industry, jobDescription) => {
+  const prompt = `Based on the following job title, industry, and job description, suggest relevant job titles and rate the chances of getting those jobs.
+Job Title: ${jobTitle}
+Industry: ${industry}
+Job Description: ${jobDescription}
 Suggestions:`;
 
   const response = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt,
     max_tokens: 150,
-    n: 5,
+    n: 1, // Only one completion needed
     stop: null,
     temperature: 0.7,
   });
@@ -32,5 +34,5 @@ Suggestions:`;
 };
 
 module.exports = {
-  getJobSuggestions,
+  analyzeJob,
 };
